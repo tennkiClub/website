@@ -1,4 +1,4 @@
-package main
+package githubauth
 
 import (
 	"bytes"
@@ -9,16 +9,8 @@ import (
 //github base url
 var githubBase = "https://github.com/login/oauth/authorize"
 
-//github client ID
-var clientID = "thisisclientkey"
-
-//github SECRET
-var secretKey = ""
-
-//github org name
-var orgname = "HakureiClub"
-
-func getGitHubAuth() string {
+//GetGitHubAuth func
+func GetGitHubAuth(clientID string) string {
 	var buffer bytes.Buffer
 	buffer.WriteString(githubBase)
 	buffer.WriteString("?client_id")
@@ -27,7 +19,8 @@ func getGitHubAuth() string {
 	return buffer.String()
 }
 
-func getToken(code string) []byte {
+//GetToken export  func
+func GetToken(code string, clientID string, secretKey string) []byte {
 	data := "{\"client_id\":\"" + clientID +
 		"\", \"client_secret\":\"" + secretKey +
 		"\", \"code\":\"" + code +
@@ -45,7 +38,8 @@ func getToken(code string) []byte {
 	return body
 }
 
-func getUsername(token string) []byte {
+//GetUsername func
+func GetUsername(token string) []byte {
 	var tokenbuffer bytes.Buffer
 	tokenbuffer.WriteString("token ")
 	tokenbuffer.WriteString(token)
@@ -61,7 +55,8 @@ func getUsername(token string) []byte {
 	return body
 }
 
-func getOrg(name string, token string) int {
+//GetOrg func
+func GetOrg(name string, token string) int {
 	var tokenbuffer bytes.Buffer
 	tokenbuffer.WriteString("token ")
 	tokenbuffer.WriteString(token)

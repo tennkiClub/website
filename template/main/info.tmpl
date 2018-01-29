@@ -1,7 +1,7 @@
 {{ define "content" }}
     <div class="reicss front flheight general">
         <div class="ts flheight container">
-            <div class="reicss head">
+            <div class="reicss front head">
                 <div class="reicss top background">
                 </div>
                 <div class="ts reicss top flheight grid">
@@ -15,9 +15,9 @@
                     </div>
                 </div>
             </div>
-            <div class="reicss front indexcover">
+            <div class="reicss contentcover">
             </div>
-            <div class="ts evenly divided reicss index menu">
+            <div class="ts evenly divided reicss content menu">
                 <a class="active item">
                     <div class="ts reicss header">
                         <div class="reicss main header">Top</div>
@@ -50,24 +50,19 @@
                     </div>
                 </a>
             </div>
-            <div class="reicss indexcontent">
+            <div class="reicss pagecontent">
                 <div class = "ts grid">
                     <div class = "seven wide column">
                         <div class="ts reicss header">
-                                Information
-                                    <div class="reicss inline sub header">インフォメーション</div>
+                            {{ .info.Title }}
                         </div>
-                        <div class="ts bulleted list">
-                        {{ range $key, $value := .info }}
-                            <a class="item" href="/info/{{ $value.URL }}">{{ $value.Title }}</a>
-                        {{end}}
-                        </div>
+                        {{ .info.Content }}
                     </div>
                         <div class = "seven wide column">
                         </div>
                 </div>
             </div>
-            <div class="reicss index footer">
+            <div class="reicss content footer">
                 Copyright . 2018 風雨陰晴故事販賣鋪
             </div>
         </div>

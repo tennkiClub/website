@@ -7,6 +7,12 @@
 			"revision": ""
 		},
 		{
+			"checksumSHA1": "Pc2ORQp+VY3Un/dkh4QwLC7R6lE=",
+			"path": "github.com/BurntSushi/toml",
+			"revision": "a368813c5e648fee92e5f6c30e3944ff9d5e8895",
+			"revisionTime": "2017-06-26T11:06:00Z"
+		},
+		{
 			"checksumSHA1": "cfIp4rlS5RF0k1LFfcFHvTzt9KY=",
 			"path": "github.com/denisenkom/go-mssqldb",
 			"revision": "7deea793d3c7703dd74a1a38f09223b8c2cd0501",
@@ -53,6 +59,12 @@
 			"path": "github.com/golang/protobuf/proto",
 			"revision": "925541529c1fa6821df4e44ce2723319eb2be768",
 			"revisionTime": "2018-01-25T21:43:03Z"
+		},
+		{
+			"checksumSHA1": "OLqprTiaOxrn4X2yJ9LV+WbFJ14=",
+			"path": "github.com/jinzhu/configor",
+			"revision": "6ecfe629230f24c2e92c7894c6ab21b83b757a39",
+			"revisionTime": "2017-10-24T08:10:03Z"
 		},
 		{
 			"checksumSHA1": "gxjkI9acQsXCdgN4IcSwRiohm08=",
@@ -141,5 +153,5 @@
 			"revisionTime": "2018-01-09T11:43:31Z"
 		}
 	],
-	"rootPath": "github.com/tennkiClub/website"
+	"rootPath": "github.com/tennkiclub/website"
 }

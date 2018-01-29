@@ -5,7 +5,12 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	eztemplate "github.com/michelloworld/ez-gin-template"
+	"local_modules/db"
+	"math/rand"
 	"os"
+	"strconv"
+	"time"
+	"views"
 )
 
 func main() {
@@ -19,11 +24,20 @@ func main() {
 			render.Debug = true
 			route.HTMLRender = render.Init()
 			// route for Index
-			route.GET("/", Index)
+			route.GET("/", view.Index)
+			route.GET("/info/:url", view.Information)
 			route.Run()
 		} else if os.Args[1] == "--dbinit" {
-			dbinit := New()
-			dbinit.createSchema()
+			dbinit := db.New()
+			dbinit.CreateSchema()
+			dbinit.CloseDBConnect()
+		} else if os.Args[1] == "--dbtest" {
+			dbtest := db.New()
+			rand.Seed(time.Now().UnixNano())
+			testinfo := db.Information{URL: strconv.Itoa(rand.Intn(65535)), Title: "test", Content: "testit"}
+			dbtest.AddInformation(&testinfo)
+			dbtest.QueryLimitInformation(10)
+			dbtest.CloseDBConnect()
 		} else {
 			fmt.Println("Please use:")
 			fmt.Println("--runserver : run gin Server. ")
