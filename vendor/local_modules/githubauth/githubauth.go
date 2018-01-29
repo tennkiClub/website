@@ -2,7 +2,7 @@ package githubauth
 
 import (
 	"bytes"
-	"io/ioutil"
+	"encoding/json"
 	"net/http"
 )
 
@@ -23,6 +23,17 @@ type OrgContent struct {
 	OrgName string
 }
 
+//JSONAccessToken struct
+type jsonAccessToken struct {
+	AccessToken string `json:"access_token"`
+	TokenType   string
+	Scope       string
+}
+
+type jsonUsername struct {
+	Login string
+}
+
 //GetGitHubAuth func
 func GetGitHubAuth(key *Key) string {
 	var buffer bytes.Buffer
@@ -34,13 +45,14 @@ func GetGitHubAuth(key *Key) string {
 }
 
 //GetToken export  func
-func GetToken(key *Key) []byte {
+func GetToken(key *Key) string {
 	data := "{\"client_id\":\"" + key.ClientID +
 		"\", \"client_secret\":\"" + key.SecretKey +
 		"\", \"code\":\"" + key.Code +
 		"\"}"
 	var jsonStr = []byte(data)
 	req, err := http.NewRequest("POST", "https://github.com/login/oauth/access_token/", bytes.NewBuffer(jsonStr))
+	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Accept", "application/json")
 	client := &http.Client{}
 	resp, err := client.Do(req)
@@ -48,12 +60,17 @@ func GetToken(key *Key) []byte {
 		panic(err)
 	}
 	defer resp.Body.Close()
-	body, _ := ioutil.ReadAll(resp.Body)
-	return body
+	decoder := json.NewDecoder(resp.Body)
+	var jsonToken jsonAccessToken
+	err = decoder.Decode(&jsonToken)
+	if err != nil {
+		panic(err)
+	}
+	return jsonToken.AccessToken
 }
 
 //GetUsername func
-func GetUsername(token string) []byte {
+func GetUsername(token string) string {
 	var tokenbuffer bytes.Buffer
 	tokenbuffer.WriteString("token ")
 	tokenbuffer.WriteString(token)
@@ -65,8 +82,13 @@ func GetUsername(token string) []byte {
 		panic(err)
 	}
 	defer resp.Body.Close()
-	body, _ := ioutil.ReadAll(resp.Body)
-	return body
+	decoder := json.NewDecoder(resp.Body)
+	var jsonUser jsonUsername
+	err = decoder.Decode(&jsonUser)
+	if err != nil {
+		panic(err)
+	}
+	return jsonUser.Login
 }
 
 //GetOrg func

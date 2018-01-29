@@ -30,6 +30,7 @@ func main() {
 	if len(os.Args) > 1 {
 		if os.Args[1] == "--runserver" {
 			authc := middleware.AuthContent{Config.Github.OrgName, Config.Github.ClientID}
+			authk := middleware.AuthGithubKey{Config.Github.ClientID, Config.Github.SecretKey}
 			route := gin.Default()
 			route.Static("/static", "./static")
 			render := eztemplate.New()
@@ -39,7 +40,9 @@ func main() {
 			route.HTMLRender = render.Init()
 			// route for Index
 			route.GET("/", endpoints.Index)
+			route.GET("/oauth/callback", middleware.AuthGithubCallback(&authk), endpoints.OauthCallback)
 			route.GET("/admin", middleware.AuthRequired(&authc), endpoints.AdminIndex)
+			route.GET("/error/usernotfound", endpoints.AuthError)
 			route.GET("/info/:url", endpoints.Information)
 			route.Run()
 		} else if os.Args[1] == "--dbinit" {
