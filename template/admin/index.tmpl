@@ -1,7 +1,7 @@
 {{ define "content" }}
     <div class="reicss front flheight general">
         <div class="ts flheight container">
-            <div class="reicss head">
+            <div class="reicss front head">
                 <div class="reicss top background">
                 </div>
                 <div class="ts reicss top flheight grid">
@@ -14,8 +14,6 @@
                     <div class = "four wide column">
                     </div>
                 </div>
-            </div>
-            <div class="reicss index cover">
             </div>
             <div class="ts evenly divided reicss menu">
                 <a class="active item">
@@ -50,18 +48,13 @@
                     </div>
                 </a>
             </div>
-            <div class="reicss index content">
+            <div class="reicss page content">
                 <div class = "ts grid">
                     <div class = "seven wide column">
                         <div class="ts reicss header">
-                                Information
-                                    <div class="reicss inline sub header">インフォメーション</div>
+                            {{ .info.Title }}
                         </div>
-                        <div class="ts bulleted list">
-                        {{ range $key, $value := .info }}
-                            <a class="item" href="/info/{{ $value.URL }}">{{ $value.Title }}</a>
-                        {{end}}
-                        </div>
+                        {{ .info.Content }}
                     </div>
                         <div class = "seven wide column">
                         </div>

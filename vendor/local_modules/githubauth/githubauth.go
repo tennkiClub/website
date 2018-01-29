@@ -9,21 +9,35 @@ import (
 //github base url
 var githubBase = "https://github.com/login/oauth/authorize"
 
+//Key Service
+type Key struct {
+	Code      string
+	ClientID  string
+	SecretKey string
+}
+
+//OrgContent strct
+type OrgContent struct {
+	Name    string
+	Token   string
+	OrgName string
+}
+
 //GetGitHubAuth func
-func GetGitHubAuth(clientID string) string {
+func GetGitHubAuth(key *Key) string {
 	var buffer bytes.Buffer
 	buffer.WriteString(githubBase)
-	buffer.WriteString("?client_id")
-	buffer.WriteString(clientID)
-	buffer.WriteString("scope=user%20admin:org%20repo&allow_singup=false")
+	buffer.WriteString("?client_id=")
+	buffer.WriteString(key.ClientID)
+	buffer.WriteString("&scope=user%20admin:org%20repo&allow_singup=false")
 	return buffer.String()
 }
 
 //GetToken export  func
-func GetToken(code string, clientID string, secretKey string) []byte {
-	data := "{\"client_id\":\"" + clientID +
-		"\", \"client_secret\":\"" + secretKey +
-		"\", \"code\":\"" + code +
+func GetToken(key *Key) []byte {
+	data := "{\"client_id\":\"" + key.ClientID +
+		"\", \"client_secret\":\"" + key.SecretKey +
+		"\", \"code\":\"" + key.Code +
 		"\"}"
 	var jsonStr = []byte(data)
 	req, err := http.NewRequest("POST", "https://github.com/login/oauth/access_token/", bytes.NewBuffer(jsonStr))
@@ -56,15 +70,15 @@ func GetUsername(token string) []byte {
 }
 
 //GetOrg func
-func GetOrg(name string, token string) int {
+func GetOrg(orgc *OrgContent) int {
 	var tokenbuffer bytes.Buffer
 	tokenbuffer.WriteString("token ")
-	tokenbuffer.WriteString(token)
+	tokenbuffer.WriteString(orgc.Token)
 	var urlbuffer bytes.Buffer
 	urlbuffer.WriteString("https://api.github.com/orgs/")
-	urlbuffer.WriteString(orgname)
+	urlbuffer.WriteString(orgc.OrgName)
 	urlbuffer.WriteString("/memberships/")
-	urlbuffer.WriteString(name)
+	urlbuffer.WriteString(orgc.Name)
 	req, err := http.NewRequest("GET", urlbuffer.String(), nil)
 	req.Header.Set("Authorization", tokenbuffer.String())
 	client := &http.Client{}

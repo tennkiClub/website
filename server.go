@@ -2,20 +2,34 @@
 package main
 
 import (
+	"endpoints"
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"github.com/jinzhu/configor"
 	eztemplate "github.com/michelloworld/ez-gin-template"
 	"local_modules/db"
 	"math/rand"
+	"middleware"
 	"os"
 	"strconv"
 	"time"
-	"views"
 )
 
+//Config struct
+var Config = struct {
+	APPName string
+	Github  struct {
+		ClientID  string
+		SecretKey string
+		OrgName   string
+	}
+}{}
+
 func main() {
+	configor.Load(&Config, "config.yaml")
 	if len(os.Args) > 1 {
 		if os.Args[1] == "--runserver" {
+			authc := middleware.AuthContent{Config.Github.OrgName, Config.Github.ClientID}
 			route := gin.Default()
 			route.Static("/static", "./static")
 			render := eztemplate.New()
@@ -24,8 +38,9 @@ func main() {
 			render.Debug = true
 			route.HTMLRender = render.Init()
 			// route for Index
-			route.GET("/", view.Index)
-			route.GET("/info/:url", view.Information)
+			route.GET("/", endpoints.Index)
+			route.GET("/admin", middleware.AuthRequired(&authc), endpoints.AdminIndex)
+			route.GET("/info/:url", endpoints.Information)
 			route.Run()
 		} else if os.Args[1] == "--dbinit" {
 			dbinit := db.New()
