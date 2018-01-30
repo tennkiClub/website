@@ -28,7 +28,16 @@ func AuthRequired(authc *AuthContent) gin.HandlerFunc {
 			orgContent := githubauth.OrgContent{githubLogin.Value, githubToken.Value, authc.OrgName}
 			code := githubauth.GetOrg(&orgContent)
 			if code != 200 {
-				c.Redirect(302, "/error/usernotfound")
+				expiration := time.Unix(0, 0)
+				logincookie := http.Cookie{Name: "github_login", Value: "", Path: "/", Expires: expiration}
+				tokencookie := http.Cookie{Name: "github_token", Value: "", Path: "/", Expires: expiration}
+				http.SetCookie(c.Writer, &logincookie)
+				http.SetCookie(c.Writer, &tokencookie)
+				c.HTML(http.StatusOK, "admin/winfo", gin.H{
+					"title": "驗證失敗",
+					"info":  "使用者不存在",
+				})
+				c.Abort()
 				return
 			}
 			c.Next()
@@ -36,6 +45,7 @@ func AuthRequired(authc *AuthContent) gin.HandlerFunc {
 
 			keyContent := githubauth.Key{ClientID: authc.ClientID}
 			c.Redirect(302, githubauth.GetGitHubAuth(&keyContent))
+			c.Abort()
 			return
 		}
 

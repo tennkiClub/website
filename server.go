@@ -42,7 +42,6 @@ func main() {
 			route.GET("/", endpoints.Index)
 			route.GET("/oauth/callback", middleware.AuthGithubCallback(&authk), endpoints.OauthCallback)
 			route.GET("/admin", middleware.AuthRequired(&authc), endpoints.AdminIndex)
-			route.GET("/error/usernotfound", endpoints.AuthError)
 			route.GET("/info/:url", endpoints.Information)
 			route.Run()
 		} else if os.Args[1] == "--dbinit" {
