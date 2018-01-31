@@ -2,113 +2,73 @@ package githubauth
 
 import (
 	"bytes"
-	"encoding/json"
-	"net/http"
+	"github.com/parnurzeal/gorequest"
 )
 
 //github base url
 var githubBase = "https://github.com/login/oauth/authorize"
 
-//Key Service
-type Key struct {
+//ContentProvider struct
+type ContentProvider struct {
 	Code      string
 	ClientID  string
 	SecretKey string
-}
-
-//OrgContent strct
-type OrgContent struct {
-	Name    string
-	Token   string
-	OrgName string
-}
-
-//JSONAccessToken struct
-type jsonAccessToken struct {
-	AccessToken string `json:"access_token"`
-	TokenType   string
-	Scope       string
-}
-
-type jsonUsername struct {
-	Login string
+	OrgName   string
+	Token     string
+	Name      string
 }
 
 //GetGitHubAuth func
-func GetGitHubAuth(key *Key) string {
+func GetGitHubAuth(c *ContentProvider) string {
 	var buffer bytes.Buffer
 	buffer.WriteString(githubBase)
 	buffer.WriteString("?client_id=")
-	buffer.WriteString(key.ClientID)
+	buffer.WriteString(c.ClientID)
 	buffer.WriteString("&scope=user%20admin:org%20repo&allow_singup=false")
 	return buffer.String()
 }
 
 //GetToken export  func
-func GetToken(key *Key) string {
-	data := "{\"client_id\":\"" + key.ClientID +
-		"\", \"client_secret\":\"" + key.SecretKey +
-		"\", \"code\":\"" + key.Code +
-		"\"}"
-	var jsonStr = []byte(data)
-	req, err := http.NewRequest("POST", "https://github.com/login/oauth/access_token/", bytes.NewBuffer(jsonStr))
-	req.Header.Set("Content-Type", "application/json")
-	req.Header.Set("Accept", "application/json")
-	client := &http.Client{}
-	resp, err := client.Do(req)
-	if err != nil {
-		panic(err)
+func GetToken(c *ContentProvider) string {
+	type jsonAccessToken struct {
+		AccessToken string `json:"access_token"`
+		TokenType   string
+		Scope       string
 	}
-	defer resp.Body.Close()
-	decoder := json.NewDecoder(resp.Body)
+	type Data struct {
+		ClientID     string `json:"client_id"`
+		ClientSecret string `json:"client_secret"`
+		Code         string `json:"code"`
+	}
 	var jsonToken jsonAccessToken
-	err = decoder.Decode(&jsonToken)
-	if err != nil {
-		panic(err)
-	}
+	dataSend := Data{ClientID: c.ClientID, ClientSecret: c.SecretKey, Code: c.Code}
+	gorequest.New().Post("https://github.com/login/oauth/access_token/").Set("Accept", "application/json").Send(dataSend).EndStruct(&jsonToken)
 	return jsonToken.AccessToken
 }
 
 //GetUsername func
 func GetUsername(token string) string {
+	type jsonUsername struct {
+		Login string
+	}
 	var tokenbuffer bytes.Buffer
+	var jsonUser jsonUsername
 	tokenbuffer.WriteString("token ")
 	tokenbuffer.WriteString(token)
-	req, err := http.NewRequest("GET", "https://api.github.com/user", nil)
-	req.Header.Set("Authorization", tokenbuffer.String())
-	client := &http.Client{}
-	resp, err := client.Do(req)
-	if err != nil {
-		panic(err)
-	}
-	defer resp.Body.Close()
-	decoder := json.NewDecoder(resp.Body)
-	var jsonUser jsonUsername
-	err = decoder.Decode(&jsonUser)
-	if err != nil {
-		panic(err)
-	}
+	gorequest.New().Get("https://api.github.com/user").Set("Authorization", tokenbuffer.String()).EndStruct(&jsonUser)
 	return jsonUser.Login
 }
 
 //GetOrg func
-func GetOrg(orgc *OrgContent) int {
+func GetOrg(c *ContentProvider) int {
 	var tokenbuffer bytes.Buffer
 	tokenbuffer.WriteString("token ")
-	tokenbuffer.WriteString(orgc.Token)
+	tokenbuffer.WriteString(c.Token)
 	var urlbuffer bytes.Buffer
 	urlbuffer.WriteString("https://api.github.com/orgs/")
-	urlbuffer.WriteString(orgc.OrgName)
+	urlbuffer.WriteString(c.OrgName)
 	urlbuffer.WriteString("/memberships/")
-	urlbuffer.WriteString(orgc.Name)
-	req, err := http.NewRequest("GET", urlbuffer.String(), nil)
-	req.Header.Set("Authorization", tokenbuffer.String())
-	client := &http.Client{}
-	resp, err := client.Do(req)
-	if err != nil {
-		panic(err)
-	}
-	defer resp.Body.Close()
-	status := resp.StatusCode
-	return status
+	urlbuffer.WriteString(c.Name)
+	resp, _, _ := gorequest.New().Get(urlbuffer.String()).Set("Authorization", tokenbuffer.String()).End()
+	return resp.StatusCode
 }

@@ -25,7 +25,7 @@ func AuthRequired(authc *AuthContent) gin.HandlerFunc {
 		githubLogin, _ := c.Request.Cookie("github_login")
 		githubToken, _ := c.Request.Cookie("github_token")
 		if githubLogin != nil && githubToken != nil {
-			orgContent := githubauth.OrgContent{githubLogin.Value, githubToken.Value, authc.OrgName}
+			orgContent := githubauth.ContentProvider{Name: githubLogin.Value, Token: githubToken.Value, OrgName: authc.OrgName}
 			code := githubauth.GetOrg(&orgContent)
 			if code != 200 {
 				expiration := time.Unix(0, 0)
@@ -43,7 +43,7 @@ func AuthRequired(authc *AuthContent) gin.HandlerFunc {
 			c.Next()
 		} else {
 
-			keyContent := githubauth.Key{ClientID: authc.ClientID}
+			keyContent := githubauth.ContentProvider{ClientID: authc.ClientID}
 			c.Redirect(302, githubauth.GetGitHubAuth(&keyContent))
 			c.Abort()
 			return
@@ -56,7 +56,7 @@ func AuthRequired(authc *AuthContent) gin.HandlerFunc {
 func AuthGithubCallback(authk *AuthGithubKey) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		code := c.Query("code")
-		key := githubauth.Key{code, authk.ClientID, authk.SecretKey}
+		key := githubauth.ContentProvider{Code: code, ClientID: authk.ClientID, SecretKey: authk.SecretKey}
 		accesstoken := githubauth.GetToken(&key)
 		username := githubauth.GetUsername(accesstoken)
 		expiration := time.Now().Add(1 * time.Hour)
