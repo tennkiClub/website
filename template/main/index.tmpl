@@ -1,75 +1,30 @@
-{{ define "content" }}
-    <div class="reicss front flheight general">
-        <div class="ts flheight container">
-            <div class="reicss head">
-                <div class="reicss top background">
-                </div>
-                <div class="ts reicss top flheight grid">
-                    <div class = "four wide column">
-                    </div>
-                    <div class = "eight wide column">
-                        <div class = "reicss logo">
-                        </div>
-                    </div>
-                    <div class = "four wide column">
-                    </div>
-                </div>
-            </div>
-            <div class="reicss index cover">
-            </div>
-            <div class="ts evenly divided reicss menu">
-                <a class="active item">
-                    <div class="ts reicss header">
-                        <div class="reicss main header">Top</div>
-                        <div class="reicss sub header">ホーム</div>
-                    </div>
-                </a>
-                <a class="item">
-                    <div class="ts reicss header">
-                        <div class="reicss main header">Profile</div>
-                                <div class="reicss sub header">プロファイル</div>
-                    </div>
+<!-- START : topbar define -->
+{{define "top"}}active{{end}}
+{{define "page"}}index{{end}}
+<!-- STOP : topbar define -->
 
-                </a>
-                <a class="item">
-                    <div class="ts reicss header">
-                        <div class="reicss main header">Event</div>
-                                <div class="reicss sub header">イベント</div>
-                    </div>
-                </a>
-                <a class="item">
-                    <div class="ts reicss header">
-                        <div class="reicss main header">Writer</div>
-                                <div class="reicss sub header">コラムニスト</div>
-                    </div>
-                </a>
-                <a class="item">
-                    <div class="ts reicss header">
-                        <div class="reicss main header">Store</div>
-                                <div class="reicss sub header">通信販売</div>
-                    </div>
-                </a>
-            </div>
-            <div class="reicss index content">
-                <div class = "ts grid">
-                    <div class = "seven wide column">
-                        <div class="ts reicss header">
-                                Information
-                                    <div class="reicss inline sub header">インフォメーション</div>
-                        </div>
-                        <div class="ts bulleted list">
-                        {{ range $key, $value := .info }}
-                            <a class="item" href="/info/{{ $value.URL }}">{{ $value.Title }}</a>
-                        {{end}}
-                        </div>
-                    </div>
-                        <div class = "seven wide column">
-                        </div>
+<!-- START : content define -->
+{{ define "content" }}            
+    {{template "logo" .}}
+    {{template "cover" .}}
+    {{template "menu" .}}
+    <div class="reicss index content">
+        <div class = "ts grid">
+            <div class = "seven wide column">
+                <div class="ts reicss header">
+                    Information
+                    <div class="reicss inline sub header">インフォメーション</div>
+                </div>
+                <div class="ts bulleted list">
+                    {{ range $key, $value := .info }}
+                        <a class="item" href="/info/{{ $value.URL }}">{{ $value.Title }}</a>
+                    {{end}}
                 </div>
             </div>
-            <div class="reicss footer">
-                Copyright . 2018 風雨陰晴故事販賣鋪
+            <div class = "seven wide column">
             </div>
         </div>
     </div>
-{{ end }}
+    {{template "footer" .}}
+{{end}}
+<!-- STOP : content define -->

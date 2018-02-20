@@ -4,13 +4,20 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocas-ui/2.3.3/tocas.css">
-        <link rel="stylesheet" href="/static/css/reicss.css">
+        <link rel="stylesheet" href="/static/css/rei/base.css">
+        <link rel="stylesheet" href="/static/css/rei/{{ template "page" .}}.css">
+        {{ block "css" . }} {{ end }}
         <title>{{.title}} - 風雨陰晴故事販賣鋪 </title>
     </head>
     <body>
         <div class="flheight">
-        {{ template "content" . }}
+            <div class="reicss front flheight general">
+                <div class="ts flheight container">
+                    {{ block "content" . }} {{ end }}
+                 </div>
+            </div>
         </div>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/tocas-ui/2.3.3/tocas.js"></script>
+        <script src="/static/js/reijs.js"></script>
     </body>
 </html>

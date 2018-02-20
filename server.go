@@ -40,6 +40,7 @@ func main() {
 			route.HTMLRender = render.Init()
 			// route for Index
 			route.GET("/", endpoints.Index)
+			route.GET("/profile", endpoints.Profile)
 			route.GET("/oauth/callback", middleware.AuthGithubCallback(&authk), endpoints.OauthCallback)
 			route.GET("/admin", middleware.AuthRequired(&authc), endpoints.AdminIndex)
 			route.GET("/info/:url", endpoints.Information)

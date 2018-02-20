@@ -1,0 +1,35 @@
+{{define "menu"}}
+<div class="ts evenly divided reicss menu">
+    <a href="/" class="{{block "top" .}}{{end}} item">
+        <div class="ts reicss header">
+            <div class="reicss main header">Top</div>
+            <div class="reicss sub header">ホーム</div>
+        </div>
+    </a>
+    <a href="/profile" class="{{block "profile" .}}{{end}} item">
+        <div class="ts reicss header">
+            <div class="reicss main header">Profile</div>
+            <div class="reicss sub header">プロファイル</div>
+        </div>
+
+    </a>
+    <a class="{{block "event" .}}{{end}} item">
+        <div class="ts reicss header">
+            <div class="reicss main header">Event</div>
+            <div class="reicss sub header">イベント</div>
+        </div>
+    </a>
+    <a class="{{block "writer" .}}{{end}} item">
+        <div class="ts reicss header">
+            <div class="reicss main header">Writer</div>
+            <div class="reicss sub header">コラムニスト</div>
+        </div>
+    </a>
+    <a class="{{block "store" .}}{{end}} item">
+        <div class="ts reicss header">
+            <div class="reicss main header">Store</div>
+            <div class="reicss sub header">通信販売</div>
+        </div>
+    </a>
+</div>
+{{ end }}

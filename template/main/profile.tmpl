@@ -1,0 +1,19 @@
+<!-- START : topbar define -->
+{{define "profile"}} active {{end}}
+{{define "page"}}profile{{end}}
+<!-- STOP : topbar define -->
+
+<!-- START : content define -->
+{{ define "content" }}
+            {{template "logo" .}}
+            {{template "cover" .}}
+            {{template "menu" .}}
+            <div class="reicss profile content">
+                        <div class="ts reicss header">
+                                Profile
+                                    <div class="reicss inline sub header">プロファイル</div>
+                        </div>
+            </div>
+            {{template "footer" .}}
+{{end}}
+<!-- STOP : content define -->
