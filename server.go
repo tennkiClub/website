@@ -2,35 +2,23 @@
 package main
 
 import (
+	"database"
 	"endpoints"
 	"fmt"
 	"github.com/gin-gonic/gin"
-	"github.com/jinzhu/configor"
 	eztemplate "github.com/michelloworld/ez-gin-template"
-	"local_modules/db"
 	"math/rand"
 	"middleware"
+	"model"
 	"os"
 	"strconv"
 	"time"
 )
 
-//Config struct
-var Config = struct {
-	APPName string
-	Github  struct {
-		ClientID  string
-		SecretKey string
-		OrgName   string
-	}
-}{}
-
 func main() {
-	configor.Load(&Config, "config.yaml")
 	if len(os.Args) > 1 {
 		if os.Args[1] == "--runserver" {
-			authc := middleware.AuthContent{Config.Github.OrgName, Config.Github.ClientID}
-			authk := middleware.AuthGithubKey{Config.Github.ClientID, Config.Github.SecretKey}
+			// gin.SetMode(gin.ReleaseMode)
 			route := gin.Default()
 			route.Static("/static", "./static")
 			render := eztemplate.New()
@@ -40,21 +28,22 @@ func main() {
 			route.HTMLRender = render.Init()
 			// route for Index
 			route.GET("/", endpoints.Index)
+			route.GET("/test", endpoints.Test)
 			route.GET("/profile", endpoints.Profile)
-			route.GET("/oauth/callback", middleware.AuthGithubCallback(&authk), endpoints.OauthCallback)
-			route.GET("/admin", middleware.AuthRequired(&authc), endpoints.AdminIndex)
+			route.GET("/oauth/callback", middleware.AuthGithubCallback(), endpoints.OauthCallback)
+			route.GET("/admin", middleware.AuthRequired(), endpoints.AdminIndex)
 			route.GET("/info/:url", endpoints.Information)
 			route.Run()
 		} else if os.Args[1] == "--dbinit" {
-			dbinit := db.New()
+			dbinit := database.New()
 			dbinit.CreateSchema()
 			dbinit.CloseDBConnect()
 		} else if os.Args[1] == "--dbtest" {
-			dbtest := db.New()
+			dbtest := database.New()
 			rand.Seed(time.Now().UnixNano())
-			testinfo := db.Information{URL: strconv.Itoa(rand.Intn(65535)), Title: "test", Content: "testit"}
-			dbtest.AddInformation(&testinfo)
-			dbtest.QueryLimitInformation(10)
+			testinfo := model.DataInfo{URL: strconv.Itoa(rand.Intn(65535)), Title: "test", Content: "testit"}
+			dbtest.Information.Add(&testinfo)
+			dbtest.Information.QueryLimit(10)
 			dbtest.CloseDBConnect()
 		} else {
 			fmt.Println("Please use:")
