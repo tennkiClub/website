@@ -2,30 +2,20 @@ package middleware
 
 import (
 	"github.com/gin-gonic/gin"
+	"local_modules/configloader"
 	"local_modules/githubauth"
 	"net/http"
 	"time"
 )
 
-//AuthContent struct
-type AuthContent struct {
-	OrgName  string
-	ClientID string
-}
-
-//AuthGithubKey struct
-type AuthGithubKey struct {
-	ClientID  string
-	SecretKey string
-}
-
 //AuthRequired func
-func AuthRequired(authc *AuthContent) gin.HandlerFunc {
+func AuthRequired() gin.HandlerFunc {
 	return func(c *gin.Context) {
+		config := configloader.New("config.yaml")
 		githubLogin, _ := c.Request.Cookie("github_login")
 		githubToken, _ := c.Request.Cookie("github_token")
 		if githubLogin != nil && githubToken != nil {
-			orgContent := githubauth.ContentProvider{Name: githubLogin.Value, Token: githubToken.Value, OrgName: authc.OrgName}
+			orgContent := githubauth.ContentProvider{Name: githubLogin.Value, Token: githubToken.Value, OrgName: config.Github.OrgName}
 			code := githubauth.GetOrg(&orgContent)
 			if code != 200 {
 				expiration := time.Unix(0, 0)
@@ -43,7 +33,7 @@ func AuthRequired(authc *AuthContent) gin.HandlerFunc {
 			c.Next()
 		} else {
 
-			keyContent := githubauth.ContentProvider{ClientID: authc.ClientID}
+			keyContent := githubauth.ContentProvider{ClientID: config.Github.ClientID}
 			c.Redirect(302, githubauth.GetGitHubAuth(&keyContent))
 			c.Abort()
 			return
@@ -53,10 +43,11 @@ func AuthRequired(authc *AuthContent) gin.HandlerFunc {
 }
 
 //AuthGithubCallback middleware
-func AuthGithubCallback(authk *AuthGithubKey) gin.HandlerFunc {
+func AuthGithubCallback() gin.HandlerFunc {
 	return func(c *gin.Context) {
+		config := configloader.New("config.yaml")
 		code := c.Query("code")
-		key := githubauth.ContentProvider{Code: code, ClientID: authk.ClientID, SecretKey: authk.SecretKey}
+		key := githubauth.ContentProvider{Code: code, ClientID: config.Github.ClientID, SecretKey: config.Github.SecretKey}
 		accesstoken := githubauth.GetToken(&key)
 		username := githubauth.GetUsername(accesstoken)
 		expiration := time.Now().Add(1 * time.Hour)
