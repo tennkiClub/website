@@ -23,6 +23,11 @@ var Config = struct {
 		SecretKey string
 		OrgName   string
 	}
+	Database struct {
+		SecretKey string
+		UserName  string
+		HostName  string
+	}
 }{}
 
 func main() {
@@ -38,7 +43,6 @@ func main() {
 			render.Ext = ".tmpl"
 			render.Debug = true
 			route.HTMLRender = render.Init()
-			// route for Index
 			route.GET("/", endpoints.Index)
 			route.GET("/profile", endpoints.Profile)
 			route.GET("/oauth/callback", middleware.AuthGithubCallback(&authk), endpoints.OauthCallback)

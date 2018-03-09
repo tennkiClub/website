@@ -19,6 +19,12 @@ type Information struct {
 	Content string
 }
 
+//Event struct
+type Event struct {
+	gorm.Model
+	ImageURL string
+}
+
 //New function of Create Service
 func New() *Service {
 	db, err := gorm.Open("postgres", "host=localhost user=postgres dbname=website sslmode=disable password=password")

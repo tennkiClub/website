@@ -12,8 +12,8 @@ html, body
     width:100%;
     background-position:center center;
     background-image:url(/static/img/logo.png);
-    height:8em;
-    background-size:cover;
+    height:8rem;
+    background-size:auto 100%;
     background-repeat:no-repeat;
 }
 
@@ -43,7 +43,7 @@ html, body
 }
 
 .reicss.head {
-    height:8em;
+    height:8rem;
 }
 
 .reicss.top.grid{
