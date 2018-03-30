@@ -1,19 +1,123 @@
 <!-- START : topbar define -->
 {{define "profile"}} active {{end}}
-{{define "page"}}profile{{end}}
-<!-- STOP : topbar define -->
+    {{define "page"}}profile{{end}}
+        <!-- STOP : topbar define -->
 
-<!-- START : content define -->
-{{ define "content" }}
-            {{template "logo" .}}
+        <!-- START : content define -->
+        {{ define "content" }}
             {{template "cover" .}}
             {{template "menu" .}}
             <div class="reicss profile content">
-                        <div class="ts reicss header">
-                                Profile
-                                    <div class="reicss inline sub header">プロファイル</div>
+                <div class="ts reicss header">
+                    Profile
+                    <div class="reicss inline sub header">プロファイル</div>
+                </div>
+                <div class="ts divider"></div>
+                <!--
+                    <div class="ts secondary message">
+                    <div class="header">關於風雨陰晴</div>
+                    <p>
+                    在這陰晴不定的世界中，茫茫人海中的一群聚在了這裡。
+
+                    將人生經歷的風雨與夢裡迷濛的理想揉合成一篇篇的故事，靜靜等候尋覓的客人來訪。
+
+                    ——歡迎來到風雨陰晴故事舖
+                    </p>
+                    </div>
+                -->
+                <div class="ts message">
+                    <div class="ts speeches">
+                        <div id="ask" class="right pointing speech">
+                            <div class="content">
+                                風雨陰晴是？
+                            </div>
+                            <div class="middoted meta">
+                                <div class="r item">所有人都已讀</div>
+                                <div class="item">12:34</div>
+                            </div>
                         </div>
-            </div>
-            {{template "footer" .}}
-{{end}}
-<!-- STOP : content define -->
+                        <div id ="ans" class="pointing speech">
+                            <div class="avatar">
+                                <img src="/static/img/club.jpg">
+                            </div>
+                            <div class="content">
+                                <blockquote class="ts secondary quote">
+                                    You
+                                    <br />
+                                    風雨陰晴是？
+                                </blockquote>
+                                在這陰晴不定的世界中，茫茫人海中的一群聚在了這裡。
+                                <br />
+                                將人生經歷的風雨與夢裡迷濛的理想揉合成一篇篇的故事，靜靜等候尋覓的客人來訪。
+                                <br />
+                                <br />
+                                ——歡迎來到風雨陰晴故事舖
+                            </div>
+                            <div class="middoted meta">
+                                <div class="item">12:34 </div>
+                                <div class="r item">一人已讀</div>
+                            </div>
+                        </div>
+                        <div id="ask2" class="right pointing speech">
+                            <div class="content">
+                                成員有？
+                            </div>
+                            <div class="middoted meta">
+                                <div class="r item">一人已讀</div>
+                                <div class="item">12:34</div>
+                            </div>
+                        </div>
+                        <!--
+                            {{ range $key, $value := .profile}}
+                                <div class="ani pointing speech">
+                                <div class="avatar">
+                                <img src="{{$value.Icon}}">
+                                </div>
+                                <div class="content">
+                                <div class="author">{{ $value.Name }} ({{ $value.Job }}) </div>
+                                {{$value.Content}}
+                                </div>
+                                <div class="middoted meta">
+                                <div class="item">12:34 </div>
+                                <div class="r item">一人已讀</div>
+                                </div>
+                                </div>
+                            {{end}}
+                        -->
+                        <div class="ani pointing speech">
+                            <div class="avatar">
+                                <img src="/static/img/club.jpg">
+                            </div>
+                            <div class="content">
+                                <blockquote class="ts secondary quote">
+                                    You
+                                    <br />
+                                    成員有？
+                                </blockquote>
+                                <div class="ts items">
+
+                                    {{ range $key, $value := .profile}}
+                                        <div class="item">
+                                        <div class="ts small fix image">
+                                            <img src="{{$value.Icon}}">
+                                        </div>
+                                        <div class="fix content">
+                                            <div class="header">{{ $value.Name }}</div> 
+                                            <div class="meta">{{ $value.Job }} </div>
+                                            <div class="description">{{$value.Content}}</div>
+                                        </div>
+                                        </div>
+                                    {{end}}
+                                    </div>
+                                </div>
+                            <div class="middoted meta">
+                                <div class="item">12:34 </div>
+                                <div class="r item">一人已讀</div>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+                {{template "footer" .}}
+            {{end}}
+            <!-- STOP : content define -->

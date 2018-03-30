@@ -13,6 +13,7 @@ import (
 type Service struct {
 	db          *gorm.DB
 	Information *Information
+	Profile     *Profile
 }
 
 //New function of Create Service
@@ -27,15 +28,20 @@ func New() *Service {
 	info := &Information{
 		db: db,
 	}
+	profile := &Profile{
+		db: db,
+	}
 	return &Service{
 		db:          db,
 		Information: info,
+		Profile:     profile,
 	}
 }
 
 //CreateSchema func of Service
 func (s *Service) CreateSchema() {
 	s.db.AutoMigrate(&model.DataInfo{})
+	s.db.AutoMigrate(&model.DataProfile{})
 }
 
 //CloseDBConnect func of service

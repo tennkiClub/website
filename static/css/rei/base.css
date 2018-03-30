@@ -1,29 +1,33 @@
-html, body
-{
+html, body {
     height: 100%;
 }
 
 .flheight {
+    padding-top: 0.3rem;
     height:100% !important;
 }
 
-.reicss.logo {
+.headhl {
+    padding-top: 0.3rem;
+}
+.reicss.logopic {
     cursor: pointer;
     width:100%;
+    opacity:0.9;
     background-position:center center;
     background-image:url(/static/img/logo.png);
-    height:8rem;
+    height:11rem;
+    top:-6rem;
     background-size:auto 100%;
     background-repeat:no-repeat;
 }
-
 .reicss.inline.sub.header {
     margin-left:0.7em !important;
     font-size:0.8rem;
     text-align:left;
 }
 
-.reicss.main.header{
+.reicss.main.header {
     padding-top:0.2rem;
     width: 100%;
     font-weight: normal;
@@ -46,7 +50,7 @@ html, body
     height:8rem;
 }
 
-.reicss.top.grid{
+.reicss.top.grid {
     position:absolute;
     width:100%;
     z-index:1;
@@ -73,7 +77,7 @@ html, body
     -moz-box-shadow: 0 1px 4px rgba(0,0,0,.5);
     -o-box-shadow: 0 1px 4px rgba(0,0,0,.5);
     box-shadow: 0 1px 4px rgba(0,0,0,.5);
-    background-image: url(/static/img/cover.jpg);
+    background-image: url(/static/img/cover1.jpg);
     background-color:white;
     margin:0em;
     margin-bottom:2em;
@@ -83,6 +87,32 @@ html, body
 }
 
 
+.reicss.logo {
+    z-index: 1;
+    position: absolute;
+    width:100%;
+    top: calc(100% - 5rem) !important;
+    left:0%;
+    height: 5rem;
+    border-top:1px solid;
+    border-color: rgba(255,255,255,0.35);
+}
+
+.reicss.logo:after{
+     content: ''; 
+     position: absolute; 
+     top: 0; 
+     left: 0; 
+     right: 0; 
+     bottom: 0; 
+     background-color: rgba(255,255,255,0.6); 
+     z-index: -1;
+      -webkit-filter: blur(0.8rem); 
+      -moz-filter: blur(0.8rem); 
+      -ms-filter: blur(0.8rem); 
+      -o-filter: blur(0.8rem); 
+      filter: blur(0.8rem);
+}
 .reicss.content {
     padding:2em;
     position:relative;

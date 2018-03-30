@@ -11,7 +11,7 @@ func Index(c *gin.Context) {
 	db := database.New()
 	info := db.Information.QueryLimit(10)
 	c.HTML(http.StatusOK, "main/index", gin.H{
-		"title": "index",
+		"title": "Top",
 		"info":  info,
 	})
 }

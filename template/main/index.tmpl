@@ -4,24 +4,34 @@
 <!-- STOP : topbar define -->
 
 <!-- START : content define -->
-{{ define "content" }}            
-    {{template "logo" .}}
+{{ define "content" }}        
+    <div id="fb-root"></div>
+    <script>(function(d, s, id) {
+          var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) return;
+      js = d.createElement(s); js.id = id;
+      js.src = 'https://connect.facebook.net/zh_TW/sdk.js#xfbml=1&version=v2.12';
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));</script>
+
     {{template "cover" .}}
     {{template "menu" .}}
     <div class="reicss index content">
         <div class = "ts grid">
-            <div class = "seven wide column">
+            <div class = "eleven wide column">
                 <div class="ts reicss header">
                     Information
                     <div class="reicss inline sub header">インフォメーション</div>
                 </div>
+                <div class="ts divider"></div>
                 <div class="ts bulleted list">
                     {{ range $key, $value := .info }}
                         <a class="item" href="/info/{{ $value.URL }}">{{ $value.Title }}</a>
                     {{end}}
                 </div>
             </div>
-            <div class = "seven wide column">
+            <div class = "border five wide column">
+                <div class="fb-page" data-href="https://www.facebook.com/tennki.club/" data-small-header="false" data-adapt-container-width="true" data-hide-cover="false" data-show-facepile="true"><blockquote cite="https://www.facebook.com/tennki.club/" class="fb-xfbml-parse-ignore"><a href="https://www.facebook.com/tennki.club/">風雨陰晴故事販賣鋪</a></blockquote></div>
             </div>
         </div>
     </div>
